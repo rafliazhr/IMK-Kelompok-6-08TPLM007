@@ -1,0 +1,281 @@
+:root {
+    /* Warna UNPAM */
+    --unpam-blue: #0056b3;
+    --unpam-yellow: #ffc107;
+    
+    /* Tetap pertahankan variabel lainnya */
+    --primary-color: var(--unpam-blue);
+    --secondary-color: var(--unpam-yellow);
+    /* ... variabel lainnya ... */
+}
+
+/* ==================== MODE AKSESIBILITAS ==================== */
+.accessibility-mode {
+    --primary-color: #0056b3;
+    --secondary-color: #ffc107;
+    --text-color: #000;
+    --bg-color: #fff;
+    --card-bg: #f0f0f0;
+    --font-size: 18px;
+    
+    /* Penambahan untuk aksesibilitas */
+    --focus-outline: 3px solid var(--secondary-color);
+    --focus-offset: 2px;
+}
+
+/* ==================== BASE STYLES ==================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--unpam-dark);
+    text-decoration: underline;
+}
+
+/* ==================== LAYOUT COMPONENTS ==================== */
+
+/* HEADER */
+.header {
+    background-color: white;
+    padding: 1rem 0;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.site-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* NAVIGASI */
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.main-nav a {
+    font-weight: 600;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--secondary-color);
+    transition: var(--transition);
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+/* CARD */
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* BUTTON */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--unpam-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+/* FORM ELEMENTS */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-offset);
+    border-color: var(--primary-color);
+}
+
+/* ==================== DASHBOARD SPECIFIC ==================== */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background-color: var(--unpam-dark);
+    color: white;
+    padding: 1.5rem;
+}
+
+.main-content {
+    padding: 1.5rem;
+}
+
+/* ==================== ACCESSIBILITY TOOLS ==================== */
+.accessibility-toolbar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+.accessibility-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: none;
+}
+
+.accessibility-btn:hover {
+    transform: scale(1.1);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.p-3 {
+    padding: 1rem;
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+@media (max-width: 992px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        display: none; /* Bisa diganti dengan sidebar yang bisa di-toggle */
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    :root {
+        --font-size: 15px;
+    }
+}
+
+/* ==================== ACCESSIBILITY MODE ENHANCEMENTS ==================== */
+.accessibility-mode {
+    /* Focus styles */
+    *:focus {
+        outline: var(--focus-outline) !important;
+        outline-offset: var(--focus-offset) !important;
+    }
+    
+    /* Increase contrast */
+    a {
+        text-decoration: underline;
+    }
+    
+    /* Larger click targets */
+    .btn, .form-control {
+        padding: 1rem 1.5rem;
+    }
+}

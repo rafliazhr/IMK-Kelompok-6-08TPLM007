@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender - E-Learning UNPAM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .calendar-day {
+            height: 100px;
+            border: 1px solid #dee2e6;
+            padding: 5px;
+            overflow-y: auto;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .today {
+            background-color: #e3f2fd;
+        }
+        
+        .event {
+            font-size: 0.8rem;
+            padding: 2px 5px;
+            margin-bottom: 2px;
+            border-radius: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .lecture {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .exam {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .holiday {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1><i class="fas fa-calendar-alt"></i> Kalender Akademik</h1>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-outline-light" onclick="window.location.href='dashboard.html'">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="calendar-header p-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <button class="btn btn-sm btn-outline-light me-2" onclick="prevMonth()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-light" onclick="nextMonth()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <h4 id="current-month" class="mb-0">Maret 2024</h4>
+                        <div>
+                            <button class="btn btn-sm btn-light" onclick="window.location.href='dashboard.html'">
+                                <i class="fas fa-calendar-day"></i> Hari Ini
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="row g-0 text-center">
+                            <div class="col border-bottom py-2">Minggu</div>
+                            <div class="col border-bottom py-2">Senin</div>
+                            <div class="col border-bottom py-2">Selasa</div>
+                            <div class="col border-bottom py-2">Rabu</div>
+                            <div class="col border-bottom py-2">Kamis</div>
+                            <div class="col border-bottom py-2">Jumat</div>
+                            <div class="col border-bottom py-2">Sabtu</div>
+                        </div>
+                        <div id="calendar-body" class="row g-0">
+                            <!-- Kalender akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Daftar Event -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> Daftar Kegiatan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="event-list">
+                            <!-- Daftar event akan diisi oleh JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Data event contoh
+        const events = [
+            { date: '2024-03-05', title: 'UTS Pemrograman Web', type: 'exam' },
+            { date: '2024-03-12', title: 'Kuliah Jaringan Komputer', type: 'lecture' },
+            { date: '2024-03-17', title: 'Libur Nasional', type: 'holiday' },
+            { date: '2024-03-20', title: 'Pengumpulan Tugas Basis Data', type: 'exam' },
+            { date: '2024-03-25', title: 'Seminar Kewirausahaan', type: 'lecture' }
+        ];
+        
+        let currentDate = new Date();
+        
+        function renderCalendar() {
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                              "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            
+            // Update judul bulan
+            document.getElementById('current-month').textContent = 
+                `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Hitung hari dalam bulan dan bulan sebelumnya
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const prevLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+            
+            const firstDayIndex = firstDay.getDay();
+            const lastDayIndex = lastDay.getDay();
+            const nextDays = 7 - lastDayIndex - 1;
+            
+            // Generate kalender
+            let calendarHTML = '';
+            let day = 1;
+            let nextDay = 1;
+            
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDayIndex) {
+                        // Hari dari bulan sebelumnya
+                        const prevDay = prevLastDay - firstDayIndex + j + 1;
+                        calendarHTML += `<div class="col calendar-day text-muted">${prevDay}</div>`;
+                    } else if (day > lastDay.getDate()) {
+                        // Hari dari bulan berikutnya
+                        calendarHTML += `<div class="col calendar-day text-muted">${nextDay}</div>`;
+                        nextDay++;
+                    } else {
+                        // Hari bulan ini
+                        const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth()+1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                        const today = new Date();
+                        const isToday = day === today.getDate() && 
+                                       currentDate.getMonth() === today.getMonth() && 
+                                       currentDate.getFullYear() === today.getFullYear();
+                        
+                        let dayEvents = events.filter(e => e.date === dateStr);
+                        
+                        calendarHTML += `
+                            <div class="col calendar-day ${isToday ? 'today' : ''}">
+                                ${day}
+                                ${dayEvents.map(e => `<div class="event ${e.type}">${e.title}</div>`).join('')}
+                            </div>
+                        `;
+                        day++;
+                    }
+                }
+                
+                // Berhenti jika sudah melebihi hari terakhir
+                if (day > lastDay.getDate() && nextDay > nextDays) {
+                    break;
+                }
+            }
+            
+            document.getElementById('calendar-body').innerHTML = calendarHTML;
+            renderEventList();
+        }
+        
+        function renderEventList() {
+            const monthStr = (currentDate.getMonth()+1).toString().padStart(2, '0');
+            const monthEvents = events.filter(e => e.date.startsWith(`${currentDate.getFullYear()}-${monthStr}`));
+            
+            let eventHTML = '';
+            
+            if (monthEvents.length === 0) {
+                eventHTML = '<div class="alert alert-info">Tidak ada kegiatan di bulan ini</div>';
+            } else {
+                monthEvents.forEach(event => {
+                    const [year, month, day] = event.date.split('-');
+                    const eventDate = new Date(year, month-1, day);
+                    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                    
+                    eventHTML += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">${event.title}</h5>
+                                        <small class="text-muted">
+                                            ${dayNames[eventDate.getDay()]}, ${day} ${monthNames[eventDate.getMonth()]} ${year}
+                                        </small>
+                                    </div>
+                                    <span class="badge ${getEventBadgeClass(event.type)}">
+                                        ${getEventTypeName(event.type)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('event-list').innerHTML = eventHTML;
+        }
+        
+        function getEventBadgeClass(type) {
+            switch(type) {
+                case 'lecture': return 'bg-success';
+                case 'exam': return 'bg-danger';
+                case 'holiday': return 'bg-warning text-dark';
+                default: return 'bg-primary';
+            }
+        }
+        
+        function getEventTypeName(type) {
+            switch(type) {
+                case 'lecture': return 'Perkuliahan';
+                case 'exam': return 'Ujian/Tugas';
+                case 'holiday': return 'Libur';
+                default: return 'Lainnya';
+            }
+        }
+        
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+        
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                              "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            renderCalendar();
+        });
+    </script>
+</body>
+</html>

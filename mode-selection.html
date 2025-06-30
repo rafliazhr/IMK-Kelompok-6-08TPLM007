@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Mode - E-Learning UNPAM</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mode-selection.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="mode-selection-container">
+        <div class="mode-selection-card">
+            <div class="mode-header">
+                <h2><i class="fas fa-cog"></i> Pilih Mode Penggunaan</h2>
+                <p>Silakan pilih mode yang sesuai dengan kebutuhan Anda</p>
+            </div>
+            <div class="mode-options">
+                <div class="mode-card" onclick="selectMode('normal')">
+                    <div class="mode-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Mode Standar</h3>
+                    <p>Tampilan untuk pengguna umum</p>
+                    <button class="btn-select">Pilih Mode</button>
+                </div>
+                <div class="mode-card" onclick="selectMode('accessibility')">
+                    <div class="mode-icon">
+                        <i class="fas fa-wheelchair"></i>
+                    </div>
+                    <h3>Mode Aksesibilitas</h3>
+                    <p>Optimalkan untuk pengguna disabilitas</p>
+                    <button class="btn-select">Pilih Mode</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectMode(mode) {
+            // Simpan pilihan mode
+            localStorage.setItem('accessMode', mode);
+            
+            // Redirect ke dashboard
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

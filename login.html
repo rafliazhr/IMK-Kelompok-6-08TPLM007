@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk ke E-Learning UNPAM</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Masuk ke E-Learning</h2>
+            </div>
+            <div class="login-body">
+                <div class="login-logo">
+                    <img src="image/logo.png" alt="Logo UNPAM">
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" placeholder="211011401743" aria-describedby="usernameHelp" required>
+                        <small id="usernameHelp" class="form-text">Gunakan NIM untuk mahasiswa</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Ingat saya</label>
+                    </div>
+                    <button type="submit" class="btn-login">MASUK</button>
+                    <div class="forgot-password">
+                        <a href="#">Lupa password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if(username && password) {
+                // Simpan status login (simulasi)
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Redirect ke halaman mode selection
+                window.location.href = 'mode-selection.html';
+            } else {
+                alert('Silakan isi username dan password');
+            }
+        });
+    </script>
+</body>
+</html>
